@@ -1,0 +1,31 @@
+{
+  "name": "nwjs-binaries",
+  "version": "0.0.0",
+  "description": "nwjs binaries distribution factory",
+  "main": "release.js",
+  "scripts": {
+    "prepare": "cnyks release.js --ir://run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/131/nwjs-binaries.git"
+  },
+  "keywords": [
+    "nwjs",
+    "node-webkit"
+  ],
+  "author": "Francois Leurent <131.js@cloudyks.org>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/131/nwjs-binaries/issues"
+  },
+  "homepage": "https://github.com/131/nwjs-binaries#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "cnyks": "^1.17.1",
+    "extract-zip": "^1.6.5",
+    "fs-extra": "^3.0.1",
+    "nyks": "^3.19.0",
+    "progress": "^1.1.8"
+  }
+}
