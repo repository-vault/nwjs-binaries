@@ -18,6 +18,7 @@ As the npm registry is NOT a CDN, this package is more a "factory" for you to us
   * https://github.com/npm/npm/issues/4738
 ```
 npm run prepare -- 0.14.6-win-ia32
+npm run prepare -- 0.26.6-win-ia32
   cd dist
 npm publish --registry=http://your-private-registry.org
 

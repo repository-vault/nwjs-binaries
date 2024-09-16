@@ -9,8 +9,8 @@ const request   = promisify(require('nyks/http/request'));
 const pipe      = require('nyks/stream/pipe');
 const sort      = require('nyks/object/sort');
 
-const move      = require('fs-extra/lib/move').move;
-const emptyDir  = require('fs-extra/lib/empty').emptyDir;
+const move       = require('fs-extra/lib/move').move;
+const mkdirpSync = require('nyks/fs/mkdirpSync');
 const remove    = require('fs-extra/lib/remove').remove;
 
 const extract   = promisify(require('extract-zip'));
@@ -24,7 +24,7 @@ class release {
     this.version = version;
   }
 
-  * run() {
+  async run() {
 
     var version = this.version;
 
@@ -41,13 +41,14 @@ class release {
     var tmp = splitter.exec(version), sver = tmp[1], sext = tmp[2];
     var version = `${sver}-${sext}`;
 
-    var remote_url = `http://dl.nwjs.io/v${sver}/nwjs-v${sver}-${sext}.zip`;
+    var remote_url = `https://dl.nwjs.io/v${sver}/nwjs-v${sver}-${sext}.zip`;
 
     var dist = path.join('dist', version), tmp = 'tmp';
 
-    yield emptyDir(dist); yield emptyDir(tmp);
+    await remove(dist); mkdirpSync(dist);
+    await remove(tmp);  mkdirpSync(tmp);
 
-    var res = yield request(remote_url); //should passthrough here
+    var res = await request(remote_url); //should passthrough here
     console.log("Downloading", remote_url);
 
     if(res.headers['content-length']){
@@ -58,11 +59,11 @@ class release {
     
     var target = path.join(tmp, 'incoming.zip');
     var dest = fs.createWriteStream(target);
-    yield pipe(res, dest);
+    await pipe(res, dest);
 
-    yield extract(target, {dir: path.resolve(tmp) });
-    yield move(`${tmp}/nwjs-v${sver}-${sext}`, dist);
-    yield remove(tmp);
+    await extract(target, {dir: path.resolve(tmp) });
+    await move(`${tmp}/nwjs-v${sver}-${sext}`, dist);
+    await remove(tmp);
 
 
     var pack = require('./package.json');
